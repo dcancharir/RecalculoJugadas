@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 namespace SesionesCliente.OnlineModels;
-[PrimaryKey(nameof(SesionId), nameof(SorteoId),nameof(JugadaId))]
+[PrimaryKey(nameof(SesionId), nameof(SorteoId), nameof(JugadaId))]
 public partial class CMP_SesionSorteoSala {
     public long SesionId { get; set; }
     public long SorteoId { get; set; }
@@ -31,4 +31,5 @@ public partial class CMP_SesionSorteoSala {
     public decimal? Factor { get; set; }
 
     public decimal? DescartePorFactor { get; set; }
+    public virtual CMP_Jugada Jugada {get;set;}
 }
