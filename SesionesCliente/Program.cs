@@ -24,6 +24,31 @@ var diaSiguiente = fechaPrimerContador.AddDays(1);
 var sesiones = onlineContext.CMP_Sesion.Where(x => x.FechaInicio.Value.Date >= fechaPrimerContador && x.FechaInicio.Value < diaSiguiente).ToList();
 
 foreach (var sesion in sesiones) {
+   
+    var sesionInsertar = new TEST_Sesion() {
+        CodMaquina = sesion.CodMaquina,
+        FechaInicio=sesion.FechaInicio,
+        FechaTermino=sesion.FechaTermino,
+        ClienteIdIas=sesion.ClienteIdIas,
+        NombreCliente=sesion.NombreCliente,
+        NroDocumento=sesion.NroDocumento,
+        UsuarioIas=sesion.UsuarioIas,
+        Terminado=sesion.Terminado,
+        MotivoTermino=sesion.MotivoTermino,
+        UsuarioTermino=sesion.UsuarioTermino,
+        EstadoEnvio=sesion.EstadoEnvio,
+        CantidadJugadas=sesion.CantidadJugadas,
+        CantidadCupones=sesion.CantidadCupones,
+        SerieIni=sesion.SerieIni,
+        SerieFin=sesion.SerieFin,
+        Mail=sesion.Mail,
+        TipoDocumentoId=sesion.TipoDocumentoId,
+        NombreTipoDocumento=sesion.NombreTipoDocumento,
+        TipoSesion=sesion.TipoSesion,
+        SesionIdOnline=sesion.SesionId
+    };
+    testSorteoSalaContext.Add(sesionInsertar);
+    testSorteoSalaContext.SaveChanges();
     var contadorAnterior = tecnologiasContext.Contadores_OnLine
     .OrderByDescending(x => x.Fecha)
     .Where(x => x.Fecha <= sesion.FechaInicio)
@@ -44,6 +69,8 @@ foreach (var sesion in sesiones) {
     DateTime tiempo = Convert.ToDateTime(sesion.FechaInicio);
     const int segundosTarea = 5;
     bool primeraVez = true;
+    Console.WriteLine($@"Iniciando migracion de Sesion : {sesion.SesionId}, cantidadContadores : {contadores.Count}");
+
     while (continuarTarea) {
         var contadorNuevo = contadores.Where(x => x.Fecha >= tiempo).OrderBy(x => x.Fecha).FirstOrDefault();
         if (primeraVez) {
@@ -141,7 +168,8 @@ foreach (var sesion in sesiones) {
                             WinCalculado = (decimal)cantidadFormulaWin,
                             BetCalculado = (decimal)cantidadFormulaBet,
                             Factor = factorMultiplicador,
-                            DescartePorFactor = descartexFactor
+                            DescartePorFactor = descartexFactor,
+                            FechaRegistro=DateTime.Now
                         };
 
                         testSorteoSalaContext.Add(item);
@@ -151,7 +179,7 @@ foreach (var sesion in sesiones) {
 
 
 
-                        Console.WriteLine($@"Cod_Cont_OL = {contadorNuevo.Cod_Cont_OL} ; Cod_Cont_OLAnterior = {contadorAnterior.Cod_Cont_OL}; CoinIn = {contadorNuevo.CoinIn}; CoinInAnterior = {contadorAnterior.CoinIn} ; CantidadFormulaWin = {cantidadFormulaWin} ; CantidadFormulaBet = {cantidadFormulaBet} ; CantidadCupones = {cantidadCupones}");
+                        //Console.WriteLine($@"Cod_Cont_OL = {contadorNuevo.Cod_Cont_OL} ; Cod_Cont_OLAnterior = {contadorAnterior.Cod_Cont_OL}; CoinIn = {contadorNuevo.CoinIn}; CoinInAnterior = {contadorAnterior.CoinIn} ; CantidadFormulaWin = {cantidadFormulaWin} ; CantidadFormulaBet = {cantidadFormulaBet} ; CantidadCupones = {cantidadCupones}");
 
                     }
                 }
@@ -168,6 +196,7 @@ foreach (var sesion in sesiones) {
         tiempo = tiempo.AddSeconds(segundosTarea);
 
     }
+    
 }
 
 

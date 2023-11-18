@@ -9,6 +9,7 @@ namespace SesionesCliente.TestSorteoSalaModels;
 public partial class TEST_Sesion {
     [Key]
     public long SesionId { get; set; }
+    public long SesionIdOnline { get; set; }
 
     public string? CodMaquina { get; set; }
 
